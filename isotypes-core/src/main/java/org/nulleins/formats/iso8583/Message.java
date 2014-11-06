@@ -1,0 +1,216 @@
+package org.nulleins.formats.iso8583;
+
+import com.google.common.base.Preconditions;
+import org.apache.commons.collections.ListUtils;
+import org.nulleins.formats.iso8583.types.MTI;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+/** An ISO8583 message instance, being a number of header values and a set of field values
+  * <p/>
+  * Every message has a reference to the <code>template</code> that describes the message
+  * and its content
+  * @author phillipsr */
+public class Message {
+  private final MTI messageTypeIndicator;
+  private final Map<Integer, Object> fields = new HashMap<>();
+  private String header;
+  private MessageTemplate template;
+
+  /** Instantiate a new message, of the type specified
+    * @param messageTypeIndicator
+    * @throws IllegalArgumentException if the supplied MTI is null */
+  public Message(final MTI messageTypeIndicator) {
+    Preconditions.checkNotNull(messageTypeIndicator, "MTI cannot be null");
+    this.messageTypeIndicator = messageTypeIndicator;
+  }
+
+  /** Answer with this message's MTI */
+  public MTI getMTI() {
+    return messageTypeIndicator;
+  }
+
+  public String getHeader() {
+    return header;
+  }
+
+  public MessageTemplate getMessageTemplate() {
+    return template;
+  }
+
+  public void setHeader(final String header) {
+    this.header = header;
+  }
+
+  public Map<Integer, Object> getFields() {
+    return fields;
+  }
+
+  public void setFields(final Map<Integer, Object> fields) {
+    this.fields.clear();
+    this.fields.putAll(fields);
+  }
+
+  public Map<String, Object> getNamedFields() {
+    final Map<String, Object> result = new HashMap<String, Object>(fields.size());
+    for (final Map.Entry<Integer, Object> item : fields.entrySet()) {
+      final FieldTemplate field = template.getField(item.getKey());
+      result.put(field.getName(), item.getValue());
+    }
+    return result;
+  }
+
+  /** Set the value of the field specified
+    * @param fieldNumber of the field to receive the value
+    * @param value       object to set
+    * @throws NoSuchFieldError         if the field is not defined for this message,
+    * @throws IllegalArgumentException if the value data type supplied is not
+    *                                  compatible with the defined field type  */
+  public void setFieldValue(final int fieldNumber, final Object value) {
+    if (!template.isFieldPresent(fieldNumber)) {
+      throw new NoSuchFieldError(fieldNumber + "");
+    }
+    final FieldTemplate field = template.getFields().get(fieldNumber);
+    if (!field.validValue(value)) {
+      throw new IllegalArgumentException("Supplied value (" + value + ") not valid for field:" + field);
+    }
+    fields.put(fieldNumber, value);
+  }
+
+  /** Set the value of the named field
+    * @param fieldName the field to receive the value
+    * @param value     object to set
+    * @throws NoSuchFieldError         if the field is not defined for this message
+    * @throws IllegalArgumentException if the value data type supplied is not
+    *                                  compatible with the defined field type */
+  public void setFieldValue(final String fieldName, final Object value) {
+    setFieldValue(template.getFieldNumberForName(fieldName), value);
+  }
+
+  /** @return the value of the field specified
+    * @param fieldNumber of field whose value is requested
+    * @throws NoSuchFieldError if the field is not defined for this message */
+  public Object getFieldValue(final int fieldNumber) {
+    if (!template.isFieldPresent(fieldNumber)) {
+      throw new NoSuchFieldError(fieldNumber + "");
+    }
+    return fields.get(fieldNumber);
+  }
+
+  /** @return the value of the field specified
+    * @param fieldName of field whose value is requested
+    * @throws NoSuchFieldError if the field is not defined for this message */
+  public Object getFieldValue(final String fieldName) {
+    return getFieldValue(
+        template.getFieldNumberForName(fieldName));
+  }
+
+  /** Remove the field specified from this message's field set
+    * @param fieldNumber
+    * @throws NoSuchFieldError if the field is not defined for this message */
+  public void removeField(final int fieldNumber) {
+    if (!template.isFieldPresent(fieldNumber)) {
+      throw new NoSuchFieldError(fieldNumber + "");
+    }
+    fields.remove(fieldNumber);
+  }
+
+  /** @return an empty list if this message is valid according to its template,
+    * otherwise return a list of error messages */
+  public List<String> validate() {
+    return template.validate(this);
+  }
+
+  /** Set the message template that defines this message instance
+    * @param messageTemplate */
+  public void setTemplate(final MessageTemplate messageTemplate) {
+    this.template = messageTemplate;
+  }
+
+  /** @return a summary of this field, for logging purposes */
+  @Override
+  public String toString() {
+    return "Message mti=" + messageTypeIndicator + " header=" + header + " #field=" + fields.size();
+  }
+
+  public Message asType(final MTI messageTypeIndicator, final MessageTemplate template, final Map<? extends Integer, ?> fields) {
+    return Builder()
+        .messageTypeIndicator(messageTypeIndicator)
+        .header(header)
+        .template(template)
+        .fields(new HashMap<>(fields))
+        .build();
+  }
+
+  /** @return an iterator to iterate over the multi-line description of this message,
+    * including message type information, field type information and field values */
+  public Iterable<String> describe() {
+    return new Describer(template, fields);
+  }
+
+  /** Add all the supplied field values to this message
+    * @param fieldValues */
+  public void addFields(final Map<Integer, Object> fieldValues) {
+    fields.putAll(fieldValues);
+  }
+
+  /** @return true if message is valid, according to it's template (all the required fields are present) */
+  public boolean isValid() {
+    return ListUtils.EMPTY_LIST.equals(this.validate());
+  }
+
+  /** @return true if field <code>number</code> present in the message
+    * @param number */
+  public boolean isFieldPresent(final int number) {
+    return template.isFieldPresent(number);
+  }
+
+  /** @return a new builder, for constructing messages */
+  public static Builder Builder() {
+    return new Builder();
+  }
+
+  public static class Builder {
+    private MTI messageTypeIndicator;
+    private String header;
+    private Map<Integer, Object> fields = Collections.emptyMap();
+    private MessageTemplate template;
+
+    public Builder messageTypeIndicator(final MTI code) {
+      this.messageTypeIndicator = code;
+      return this;
+    }
+
+    public Builder messageTypeIndicator(final String code) {
+      return messageTypeIndicator(MTI.create(code));
+    }
+
+    public Builder header(final String header) {
+      this.header = header;
+      return this;
+    }
+
+    public Builder template(final MessageTemplate template) {
+      this.template = template;
+      return this;
+    }
+
+    public Builder fields(final Map<Integer, Object> fields) {
+      this.fields = fields;
+      return this;
+    }
+
+    public Message build() {
+      final Message result = new Message(messageTypeIndicator);
+      result.setHeader(header);
+      result.setFields(fields);
+      result.setTemplate(template);
+      return result;
+    }
+  }
+
+}
