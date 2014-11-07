@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * <pre>
  * %B1234567890123445^EARIBUG/H.                ^99011200000000000000**XXX******?*
  * ^^^               ^^                         ^^   ^       ^         ^        ^^
- * |||_ Card number  ||_ Card holder            ||   |       |         |_ CVV** ||_ LRC
+ * |||_ Card f  ||_ Card holder            ||   |       |         |_ CVV** ||_ LRC
  * ||_ Format code   |_ Field separator         ||   |       |                  |_ End sentinel
  * |_ Start sentinel           Field separator _||   |       |_ Discretionary data
  *                                   Expiration _|   |_ Service code
@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
  * <table>
  * <tr><td>STX</td><td>Start sentinel � one character (generally '%')</td></tr>
  * <tr><td>FMT</td><td>Format code="B" � one character (alpha only)</td></tr>
- * <tr><td>PAN</td><td>Primary account number (PAN) � up to 19 characters.
- * Usually, but not always, matches the credit card number printed on the front of the card.</td></tr>
+ * <tr><td>PAN</td><td>Primary account f (PAN) � up to 19 characters.
+ * Usually, but not always, matches the credit card f printed on the front of the card.</td></tr>
  * <tr><td>FS</td><td>Field Separator � one character (generally '^')</td></tr>
  * <tr><td>NAME*</td><td>Name � two to 26 characters</td></tr>
  * <tr><td>FS</td><td>Field Separator � one character (generally '^')</td></tr>
@@ -53,7 +53,7 @@ import java.util.regex.Pattern;
  * <pre>
  * ;1234567890123445=99011200XXXX00000000?*
  * ^^               ^^   ^   ^           ^^
- * ||_ Card number  ||   |   |_ Encrypted||_ LRC
+ * ||_ Card f  ||   |   |_ Encrypted||_ LRC
  * |_ Start sentinel||   |      PIN***   |_ End sentinel
  *                  ||   |_ Service code
  * Field separator _||_ Expiration

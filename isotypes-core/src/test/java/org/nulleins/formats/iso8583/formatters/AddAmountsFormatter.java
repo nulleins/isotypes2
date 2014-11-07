@@ -1,4 +1,4 @@
-package org.nulleins.formats.iso8583.formatters.special;
+package org.nulleins.formats.iso8583.formatters;
 
 import org.nulleins.formats.iso8583.formatters.NumberFormatter;
 import org.nulleins.formats.iso8583.formatters.TypeFormatter;

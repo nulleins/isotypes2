@@ -29,14 +29,13 @@ public class TestFields {
   }
 
   @Test
-  public void testNumeric()
-      throws ParseException {
-    final FieldTemplate target = FieldTemplate.Builder()
-        .number(2)
+  public void testNumeric() throws ParseException {
+    final FieldTemplate target = FieldTemplate.localBuilder(messageTemplate).get()
+        .f(2)
         .type(FieldType.NUMERIC)
-        .dimension("fixed(6)")
-        .name("test").build();
-    target.setMessage(messageTemplate);
+        .dim("fixed(6)")
+        .name("test")
+        .build();
     final String intValue = new String(target.format(128));
     assertThat(intValue, is("000128"));
 
@@ -53,12 +52,12 @@ public class TestFields {
 
   @Test
   public void testLlvar() {
-    final FieldTemplate target = FieldTemplate.Builder()
-        .number(2)
+    final FieldTemplate target = FieldTemplate.localBuilder(messageTemplate).get()
+        .f(2)
         .type(FieldType.ALPHANUM)
-        .dimension("llvar(3)")
-        .name("test").build();
-    target.setMessage(messageTemplate);
+        .dim("llvar(3)")
+        .name("test")
+        .build();
     final String intValue = new String(target.format("128"));
     assertThat(intValue, is("128"));
 
@@ -66,12 +65,12 @@ public class TestFields {
 
   @Test
   public void testLllvar() {
-    final FieldTemplate target = FieldTemplate.Builder()
-        .number(2)
+    final FieldTemplate target = FieldTemplate.localBuilder(messageTemplate).get()
+        .f(2)
         .type(FieldType.ALPHASYMBOL)
-        .dimension("lllvar(11)")
-        .name("test").build();
-    target.setMessage(messageTemplate);
+        .dim("lllvar(11)")
+        .name("test")
+        .build();
     final String intValue = new String(target.format("Hello World"));
     assertThat(intValue, is("Hello World"));
 

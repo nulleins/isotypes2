@@ -107,7 +107,7 @@ public class TestMessageFactory {
   }
 
   private static final String MESSAGE_FACTORY_DESCRIPTION =
-      "MessageFactory id=testFactory description='Test Message Schema' "
+      "MessageFactory id=testFactory desc='Test Message Schema' "
           + "header=ISO015000077 contentType=TEXT charset=US-ASCII bitmapType=HEX messages# 1";
 
   @Before
@@ -119,7 +119,7 @@ public class TestMessageFactory {
     factory.setContentType(ContentType.TEXT);
     factory.setHeader("ISO015000077");
     final MessageTemplate template = MessageTemplate.create("ISO015000077", RequestMessage, BitmapType.HEX);
-    template.addField(FieldTemplate.Builder().number(2).type(FieldType.NUMERIC).dimension("fixed(6)").name("TestField").build());
+    template.addField(FieldTemplate.localBuilder(template).get().f(2).type(FieldType.NUMERIC).dim("fixed(6)").name("TestField").build());
     factory.addMessage(template);
     factory.initialize();
   }

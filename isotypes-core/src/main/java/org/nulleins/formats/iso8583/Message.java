@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 
-/** An ISO8583 message instance, being a number of header values and a set of field values
+/** An ISO8583 message instance, being a f of header values and a set of field values
   * <p/>
   * Every message has a reference to the <code>template</code> that describes the message
   * and its content
@@ -146,7 +146,7 @@ public class Message {
         .build();
   }
 
-  /** @return an iterator to iterate over the multi-line description of this message,
+  /** @return an iterator to iterate over the multi-line desc of this message,
     * including message type information, field type information and field values */
   public Iterable<String> describe() {
     return new Describer(template, fields);
@@ -163,7 +163,7 @@ public class Message {
     return ListUtils.EMPTY_LIST.equals(this.validate());
   }
 
-  /** @return true if field <code>number</code> present in the message
+  /** @return true if field <code>f</code> present in the message
     * @param number */
   public boolean isFieldPresent(final int number) {
     return template.isFieldPresent(number);

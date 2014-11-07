@@ -3,7 +3,7 @@ package org.nulleins.formats.iso8583.types;
 import org.nulleins.formats.iso8583.MessageException;
 
 /**
- * Specification of the dimension of an ISO8583 field: fields can
+ * Specification of the dim of an ISO8583 field: fields can
  * be of fixed or variable length (hollerith)
  * @author phillipsr
  */
@@ -58,12 +58,12 @@ public final class Dimension {
   }
 
   /**
-   * Parse a field dimension specification, e.g.,<br/>
+   * Parse a field dim specification, e.g.,<br/>
    * <code>llvar(40)</code>: variable field with 2 digit size specifier and maximum length of 40, or
    * <code>fixed(6)</code> a field 6 bytes long
    * @param value
    * @return
-   * @throws IllegalArgumentException if the value is null or does not contain a valid dimension specification
+   * @throws IllegalArgumentException if the value is null or does not contain a valid dim specification
    */
   public static Dimension parse(final String value) {
     if (value == null) {

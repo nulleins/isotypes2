@@ -42,7 +42,7 @@ public class TestNumTypes {
       byte[] data = FieldParser.getBytes(testData, pos, 8);
       formatter.parse(FieldType.NUMERIC, Dimension.parse("FIXED(8)"), 8, data);
     } catch (ParseException e) {
-      assertThat(e.getMessage(), is("Bad number format For input string: \"1234567Z\" for type=n [1234567Z]"));
+      assertThat(e.getMessage(), is("Bad f format For input string: \"1234567Z\" for type=n [1234567Z]"));
       assertThat(pos.getIndex(), is(12));
 
       throw e;

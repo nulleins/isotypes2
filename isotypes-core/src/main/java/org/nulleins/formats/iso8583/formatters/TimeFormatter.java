@@ -31,7 +31,7 @@ public class TimeFormatter
     try {
       return Formatter.parseLocalTime(decode(data));
     } catch (final Exception e) {
-      throw new ParseException("Cannot parse time for dimension: '" + type + ":" + length + "'", length);
+      throw new ParseException("Cannot parse time for dim: '" + type + ":" + length + "'", length);
     }
   }
 

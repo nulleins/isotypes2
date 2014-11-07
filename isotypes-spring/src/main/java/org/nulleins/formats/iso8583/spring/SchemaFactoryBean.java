@@ -106,11 +106,11 @@ public class SchemaFactoryBean implements FactoryBean<MessageFactory> {
     final List<FieldTemplate> fields = this.fields.get(type);
     for (final FieldTemplate field : fields) {
       if (message.getFields().containsKey(field.getNumber())) {
-        throw new IllegalStateException("duplicate field number: "
+        throw new IllegalStateException("duplicate field f: "
             + field.getNumber() + " defined for Message type "
             + message.getMessageTypeIndicator());
       }
-      field.setMessage(message);
+      field.setMessageTemplate(message);
       message.addField(field);
     }
   }

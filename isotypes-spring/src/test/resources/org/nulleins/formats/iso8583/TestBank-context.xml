@@ -8,12 +8,12 @@
 			http://nulleins.org/schema/iso8583
 				http://nulleins.org/schema/iso8583-1.1.xsd">
 
-    <bean id="calFormatter" class="org.nulleins.formats.iso8583.formatters.special.CardAcceptorLocationFormatter"/>
+    <bean id="calFormatter" class="org.nulleins.formats.iso8583.formatters.CardAcceptorLocationFormatter"/>
 
     <iso:schema id="bankMessages" header="" bitmapType="hex" contentType="text" charset="ascii">
         <iso:description>TestBank banking messages</iso:description>
         <iso:formatters>
-            <iso:formatter type="AAf" class="org.nulleins.formats.iso8583.formatters.special.AddAmountsFormatter"/>
+            <iso:formatter type="AAf" class="org.nulleins.formats.iso8583.formatters.AddAmountsFormatter"/>
             <iso:formatter type="CALf" ref="calFormatter"/>
         </iso:formatters>
 

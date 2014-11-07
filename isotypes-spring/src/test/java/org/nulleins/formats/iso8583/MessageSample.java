@@ -36,7 +36,7 @@ public class MessageSample {
     Date dateTime = (new SimpleDateFormat("dd-MM-yyyy HH:mm:ss")).parse("01-01-2013 10:15:30");
     message.setFieldValue(3, 101010);     // processing code
     message.setFieldValue(7, dateTime);  // transmission date and time
-    message.setFieldValue(11, 4321);     // trace (correlation) number
+    message.setFieldValue(11, 4321);     // trace (correlation) f
     message.setFieldValue(12, dateTime); // transaction time
     message.setFieldValue(13, dateTime); // transaction date
 

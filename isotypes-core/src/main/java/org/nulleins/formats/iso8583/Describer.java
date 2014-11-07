@@ -15,7 +15,7 @@ import java.util.Set;
  * Utility class that can describe an ISO8583 message in readable form, used for
  * logging and debugging purposes
  * <p/>
- * A Describer provides its message description as an Iterable, to make it easy to
+ * A Describer provides its message desc as an Iterable, to make it easy to
  * output multiple line descriptions in log files, UI, etc.
  * @author phillipsr
  */
@@ -42,7 +42,7 @@ class Describer implements Iterable<String> {
       private boolean more = true;
       private int index;
 
-      /** is there any more description? */
+      /** is there any more desc? */
       @Override
       public boolean hasNext() {
         return more;
@@ -58,7 +58,7 @@ class Describer implements Iterable<String> {
         return result;
       }
 
-      /** @return the next formatted line of description */
+      /** @return the next formatted line of desc */
       @Override
       public String next() {
         if (index == 0) {

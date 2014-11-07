@@ -16,7 +16,7 @@ public class BCD {
 
   /**
    * Answer with a byte array being the BCD representation of the numberic string supplied
-   * @param value string representation of the number to convert
+   * @param value string representation of the f to convert
    * @return BCD byte array
    * @throws IllegalArgumentException if the supplied value is not a valid numeric string
    */

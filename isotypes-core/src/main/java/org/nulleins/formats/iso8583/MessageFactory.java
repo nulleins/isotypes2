@@ -28,12 +28,13 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
 
-/** ISO8583 Message factory, configured with a number of message templates (a schema),
+/** ISO8583 Message factory, configured with a f of message templates (a schema),
   * capable to creating and parsing ISO8583 messages
   * <p/>
   * Usually configured via an XML specification (<code>&lt;iso:schema&gt;</code>), it may also be
@@ -129,12 +130,12 @@ public class MessageFactory {
     this.header = header;
   }
 
-  /** @return the text description of this factory: not used in message creatio */
+  /** @return the text desc of this factory: not used in message creatio */
   public String getDescription() {
     return description;
   }
 
-  /** Set the description of this factory; this is for documentary purposes, and is
+  /** Set the desc of this factory; this is for documentary purposes, and is
     * usually set from with the iso:schema XML element
     * @param description */
   public void setDescription(final String description) {
@@ -178,7 +179,7 @@ public class MessageFactory {
   @Override
   public String toString() {
     return "MessageFactory id=" + getId()
-        + " description='" + getDescription() + "'"
+        + " desc='" + getDescription() + "'"
         + " header=" + getHeader()
         + " contentType=" + getContentType()
         + " charset=" + getCharset()
@@ -187,10 +188,10 @@ public class MessageFactory {
   }
 
   /** @return a new ISO8583 message instance of the type requested, setting the field values
-    * from the supplied parameter map, keyed by field number, matching
+    * from the supplied parameter map, keyed by field f, matching
     * <code>&lt;iso:message&gt;</code> configuration for this message type
     * @param type   type of message to create
-    * @param params field value to include in message, indexed by field number
+    * @param params field value to include in message, indexed by field f
     * @throws IllegalArgumentException - if the supplied MTI is null */
   public Message createByNumbers(final MTI type, final Map<Integer, Object> params) {
     final Message result = new Message(type);
@@ -231,7 +232,7 @@ public class MessageFactory {
     writer.appendMTI(type, dos);
     writer.appendBitmap(template.getBitmap(), bitmapType, dos);
 
-    // Iterate over the fields in order of field number,
+    // Iterate over the fields in order of field f,
     // appending the field's data to the output stream
     for (final Integer key : new TreeSet<>(template.getFields().keySet())) {
       final Object value = writeField(params.get(key), writer, dos, template.getFields().get(key));
@@ -363,7 +364,7 @@ public class MessageFactory {
     * @throws IllegalArgumentException if the type is not defined in this factory's schema */
   public Message createByNames(final MTI type, final Map<String, Object> params) {
     Preconditions.checkArgument(messages.containsKey(type), "Message not defined for MTI=" + type);
-    // convert the name map supplied to a field number keyed map
+    // convert the name map supplied to a field f keyed map
     return createByNumbers(type,
         Maps.transformEntries(messages.get(type).getFields(), mapValuesByName(params)));
   }
@@ -450,7 +451,14 @@ public class MessageFactory {
     }
   }
 
+  public void addMessages(final List<MessageTemplate> messages) {
+    for ( final MessageTemplate message : messages) {
+      addMessage(message);
+    }
+  }
+
   public static Builder Builder() { return new Builder(); }
+
   public static class Builder {
     private String id;
     private ContentType contentType;

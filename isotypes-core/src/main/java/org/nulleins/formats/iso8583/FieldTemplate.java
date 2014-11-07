@@ -1,19 +1,20 @@
 package org.nulleins.formats.iso8583;
 
 import com.google.common.base.Preconditions;
+import org.nulleins.formats.iso8583.formatters.TypeFormatter;
 import org.nulleins.formats.iso8583.types.Dimension;
 import org.nulleins.formats.iso8583.types.MTI;
 
 import java.text.ParseException;
 
-/** Definition of an ISO8583 message field, capable for formatting and parsing message
-  * fields, based upon its configuration
-  * <p/>
-  * Example:</br>
-  * <code>
-  * &lt;field number="2" type="LLVAR" name="CardNumber" description="Payment Card Number" /&gt;
-  * </code>
-  * @author phillipsr */
+/** Definition of an ISO8583 messageTemplate field, capable for formatting and parsing messageTemplate
+ * fields, based upon its configuration
+ * <p/>
+ * Example:</br>
+ * <code>
+ * &lt;field f="2" type="LLVAR" name="CardNumber" desc="Payment Card Number" /&gt;
+ * </code>
+ * @author phillipsr */
 public class FieldTemplate {
   private String type;
   private Dimension dimension;
@@ -24,17 +25,20 @@ public class FieldTemplate {
   private String autogenSpec;
   private boolean optional;
   private MTI messageType;
-  private MessageTemplate message;
+  private MessageTemplate messageTemplate;
 
-  private FieldTemplate(final int number, final String type, final Dimension dimension, final String name, final String description) {
+  private FieldTemplate(
+      final int number, final String type, final Dimension dimension, final String name, final String description, final MessageTemplate template) {
     Preconditions.checkNotNull(type);
     Preconditions.checkNotNull(dimension);
     Preconditions.checkNotNull(name);
+    Preconditions.checkNotNull(template);
     this.number = number;
     this.type = type;
     setDimension(dimension);
     this.name = name;
     this.description = description != null ? description : "";
+    this.messageTemplate = template;
   }
 
   public FieldTemplate() {
@@ -123,7 +127,7 @@ public class FieldTemplate {
     final String result;
     try {
       result = new String(
-          message.getFormatter(type).format(type, value, this.dimension));
+          messageTemplate.getFormatter(type).format(type, value, this.dimension));
     } catch (Exception e) {
       throw new IllegalStateException("Could not format data [" + value + "] for field " + this, e);
     }
@@ -147,16 +151,22 @@ public class FieldTemplate {
         + (defaultValue != null ? (" default=[" + defaultValue + "]") : "");
   }
 
-  public Object parse(final byte[] data)
-      throws ParseException {
-    return message.getFormatter(type).parse(type, dimension, data.length, data);
+  public Object parse(final byte[] data) throws ParseException {
+    Preconditions.checkNotNull(type);
+    Preconditions.checkNotNull(dimension);
+    Preconditions.checkNotNull(messageTemplate);
+    final TypeFormatter<?> formatter = messageTemplate.getFormatter(type);
+    if (formatter == null) {
+      throw new IllegalStateException("no formatted defined for field: " + this);
+    }
+    return messageTemplate.getFormatter(type).parse(type, dimension, data.length, data);
   }
 
   /**
    * @param messageTemplate
    */
-  public void setMessage(final MessageTemplate messageTemplate) {
-    this.message = messageTemplate;
+  public void setMessageTemplate(final MessageTemplate messageTemplate) {
+    this.messageTemplate = messageTemplate;
   }
 
   /**
@@ -164,22 +174,37 @@ public class FieldTemplate {
    * @return
    */
   public boolean validValue(final Object value) {
-    return message.getFormatter(type).isValid(value, type, dimension);
+    return messageTemplate.getFormatter(type).isValid(value, type, dimension);
   }
 
-  public static Builder Builder() { return new Builder(); }
+  /** thread-safe builder, to declutter message building (create one and reuse safely) */
+  public static ThreadLocal<Builder> localBuilder(final MessageTemplate messageTemplate) {
+    return new ThreadLocal<Builder>() {
+      @Override
+      protected Builder initialValue() {
+        return new Builder(messageTemplate);
+      }
+    };
+  }
+
   public static class Builder {
-    private int number;
+    private Integer number;
     private String type;
     private Dimension dimension;
     private String name;
     private String description = "";
     private String defaultValue;
+    private final MessageTemplate template;
 
-    public Builder number(final int number) {
+    public Builder(final MessageTemplate messageTemplate) {
+      this.template = messageTemplate;
+    }
+
+    public Builder f(final int number) {
       this.number = number;
       return this;
     }
+
     public Builder type(final String type) {
       this.type = type;
       return this;
@@ -189,25 +214,34 @@ public class FieldTemplate {
       this.dimension = dimension;
       return this;
     }
-    public Builder dimension(final String dimension) {
+
+    public Builder dim(final String dimension) {
       return dimension(Dimension.parse(dimension));
     }
+
     public Builder name(final String name) {
       this.name = name;
       return this;
     }
-    public Builder description(final String description) {
+
+    public Builder desc(final String description) {
       this.description = description;
       return this;
     }
+
     public Builder defaultValue(final String value) {
       this.defaultValue = value;
       return this;
     }
 
     public FieldTemplate build() {
-      final FieldTemplate result = new FieldTemplate(number, type, dimension, name, description);
+      final FieldTemplate result = new FieldTemplate(number, type, dimension, name, description, template);
       result.setDefaultValue(defaultValue);
+      this.number = null;
+      this.name = null;
+      this.description = "";
+      this.defaultValue = null;
+      this.dimension = null;
       return result;
     }
   }

@@ -131,7 +131,7 @@ public class TestDateTypes {
     timeFormatter.format(FieldType.TIME, null, Dimension.parse("FIXED(6)"));
   }
 
-  @Test //(expected=IllegalArgumentException.class) - no longer fails as value constrained to dimension specified
+  @Test //(expected=IllegalArgumentException.class) - no longer fails as value constrained to dim specified
   public void testFormatBadTime() {
     timeFormatter.format(FieldType.TIME, "12121212", Dimension.parse("FIXED(6)"));
   }

@@ -37,7 +37,7 @@ public class TestAutogen {
   /**
    * This test using a message schema that contains both default values (the processing code)
    * and autogen instructions, to populate the transmission time with the current date/time,
-   * and the STAN field with a sequence number
+   * and the STAN field with a sequence f
    * @throws IOException
    */
   @Test

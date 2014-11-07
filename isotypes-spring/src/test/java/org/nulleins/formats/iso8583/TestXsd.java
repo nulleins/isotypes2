@@ -107,7 +107,7 @@ public class TestXsd {
     assertThat((BigInteger)readback.getFieldValue("currencyCode"), is(BigInteger.valueOf(840)));
     assertThat((BigInteger)readback.getFieldValue("originalData"), is(BigInteger.TEN));
 
-    // check the describer by comparing the description of the original message
+    // check the describer by comparing the desc of the original message
     // with that of the read-back message; as the data-types can change in translation,
     // only the first 21 chars are compared (the field definitions)
     //

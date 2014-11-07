@@ -18,7 +18,7 @@ public class CharEncoder {
    * @throws IllegalArgumentException if the charset is null, or not supported by the JVM
    */
   public CharEncoder(final String charsetName) {
-    if (charsetName == null || charsetName.isEmpty() == true) {
+    if (charsetName == null || charsetName.isEmpty()) {
       throw new IllegalArgumentException("charset cannot be null/empty");
     }
     if (!Charset.isSupported(charsetName)) {
@@ -69,4 +69,16 @@ public class CharEncoder {
     return getBytes(new String(data));
   }
 
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) { return true; }
+    if (o == null || getClass() != o.getClass()) { return false; }
+
+    return charset.equals(((CharEncoder) o).charset);
+  }
+
+  @Override
+  public int hashCode() {
+    return charset.hashCode();
+  }
 }

@@ -35,7 +35,7 @@ public class NumberFormatter
       }
       return new BigInteger(decode(data));
     } catch (final Exception e) {
-      throw new ParseException("Bad number format " + e.getMessage()
+      throw new ParseException("Bad f format " + e.getMessage()
           + " for type=" + type + " [" + new String(data) + "]", length);
     }
   }
@@ -45,7 +45,7 @@ public class NumberFormatter
     final String sign = decode(Arrays.copyOfRange(data, 0, 1));
     final char signC = sign.toUpperCase().charAt(0);
     if (signC != 'C' && signC != 'D') {
-      throw new ParseException("Bad number format for " + type
+      throw new ParseException("Bad f format for " + type
           + ": must start with C or D (field data=[" + decode(data) + "])", length);
     }
     final String value = decode(Arrays.copyOfRange(data, 1, data.length));

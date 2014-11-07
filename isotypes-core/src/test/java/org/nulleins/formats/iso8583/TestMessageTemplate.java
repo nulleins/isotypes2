@@ -30,21 +30,21 @@ public class TestMessageTemplate {
     final MessageTemplate template = MessageTemplate.create("ISO015000077", PaymentRequest, BitmapType.BINARY);
     assertThat(template.getMessageTypeIndicator(), is(PaymentRequest));
     assertThat(template.getHeader(), is("ISO015000077"));
-
+    final FieldTemplate.Builder builder = FieldTemplate.localBuilder(template).get();
     final Map<Integer, FieldTemplate> fields = new HashMap<Integer, FieldTemplate>() {{
-      put( 2, FieldTemplate.Builder().number(2).type(FieldType.ALPHA).dimension("llvar(10)").name("TestField").description("Just a Test").build());
-      put( 3, FieldTemplate.Builder().number(3).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("Processing Code").build());
-      put( 4, FieldTemplate.Builder().number(4).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("Amount, transaction (PT - cents)").build());
-      put( 7, FieldTemplate.Builder().number(7).type(FieldType.DATE).dimension(FIXED10).name("TestField").description("Transmission Date and Time").build());
-      put(11, FieldTemplate.Builder().number(11).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("System Trace Audit Number").build());
+      put( 2, builder.f(2).type(FieldType.ALPHA).dim("llvar(10)").name("TestField").desc("Just a Test").build());
+      put( 3, builder.f(3).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("Processing Code").build());
+      put( 4, builder.f(4).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("Amount, transaction (PT - cents)").build());
+      put( 7, builder.f(7).type(FieldType.DATE).dimension(FIXED10).name("TestField").desc("Transmission Date and Time").build());
+      put(11, builder.f(11).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("System Trace Audit Number").build());
     }};
     template.setFields(fields);
 
-    template.addField(FieldTemplate.Builder().number(64).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("System Trace Audit Number").build());
-    template.addField(FieldTemplate.Builder().number(66).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("System Trace Audit Number").build());
-    template.addField(FieldTemplate.Builder().number(128).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("System Trace Audit Number").build());
-    template.addField(FieldTemplate.Builder().number(130).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("System Trace Audit Number").build());
-    template.addField(FieldTemplate.Builder().number(192).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").description("System Trace Audit Number").build());
+    template.addField(builder.f(64).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("System Trace Audit Number").build());
+    template.addField(builder.f(66).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("System Trace Audit Number").build());
+    template.addField(builder.f(128).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("System Trace Audit Number").build());
+    template.addField(builder.f(130).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("System Trace Audit Number").build());
+    template.addField(builder.f(192).type(FieldType.NUMERIC).dimension(FIXED6).name("TestField").desc("System Trace Audit Number").build());
 
     // E220000000000001 becomes F220000000000001 as secondary bitmap now set
     assertThat(template.getBitmap().asHex(Bitmap.Id.PRIMARY), is("F220000000000001"));

@@ -19,7 +19,7 @@ public abstract class TypeFormatter<T> {
 
   /**
    * Answer with a string representation of the data supplied, interpreted according to the
-   * field type and dimension specification supplied
+   * field type and dim specification supplied
    * @param type      variant of the type specified for the field
    * @param dimension specifies if fixed or variable and the required size
    * @param position  of field value in the input
@@ -30,7 +30,7 @@ public abstract class TypeFormatter<T> {
   public abstract T parse(String type, Dimension dimension, int position, byte[] data) throws ParseException;
 
   /** @return with a byte array representing the data supplied, formatted according to the
-    * field type and dimension specified
+    * field type and dim specified
     * @param type      variant of the alpha type specified for the field
     * @param data      the object to be formatted
     * @param dimension specifies if fixed or variable and the required size
@@ -38,7 +38,7 @@ public abstract class TypeFormatter<T> {
     * @throws MessageException         if the data supplied results in the maximum field length being exceeded */
   public abstract byte[] format(String type, Object data, Dimension dimension);
 
-  /** @return true if the supplied value a valid instance of the type/dimension specified
+  /** @return true if the supplied value a valid instance of the type/dim specified
     * @param value     candidate value to store in field
     * @param type      (sub-type) of the field
     * @param dimension storage type & size information */

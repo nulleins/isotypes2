@@ -1,8 +1,8 @@
 package org.nulleins.formats.iso8583;
 
 import org.junit.Test;
-import org.nulleins.formats.iso8583.formatters.special.AddAmountsFormatter;
-import org.nulleins.formats.iso8583.formatters.special.CardAcceptorLocationFormatter;
+import org.nulleins.formats.iso8583.formatters.AddAmountsFormatter;
+import org.nulleins.formats.iso8583.formatters.CardAcceptorLocationFormatter;
 import org.nulleins.formats.iso8583.types.CardAcceptorLocation;
 import org.nulleins.formats.iso8583.types.Dimension;
 import org.nulleins.formats.iso8583.types.PostilionAddAmount;

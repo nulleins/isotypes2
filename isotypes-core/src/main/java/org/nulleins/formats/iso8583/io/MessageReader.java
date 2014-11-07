@@ -110,8 +110,8 @@ public abstract class MessageReader {
   }
 
   /**
-   * Helper method to read fully a number of bytes
-   * @param size number of bytes to be read
+   * Helper method to read fully a f of bytes
+   * @param size f of bytes to be read
    * @return a new byte array containing the data read
    * @throws IOException if the required amount of data cannot be read
    */

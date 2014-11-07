@@ -15,13 +15,13 @@
     <ctx:component-scan base-package="org.nulleins.formats.iso8583"/>
 
     <bean id="stanGenerator" class="org.nulleins.formats.iso8583.StanGenerator" c:floor="1" c:ceiling="999999"/>
-    <bean id="calFormatter" class="org.nulleins.formats.iso8583.formatters.special.CardAcceptorLocationFormatter"/>
+    <bean id="calFormatter" class="org.nulleins.formats.iso8583.formatters.CardAcceptorLocationFormatter"/>
 
     <iso:schema id="bankMessages" header="" bitmapType="hex" contentType="text" charset="ascii">
         <iso:description>TestBank banking messages</iso:description>
         <iso:autogen>stanGenerator</iso:autogen>
         <iso:formatters>
-            <iso:formatter type="AAf" class="org.nulleins.formats.iso8583.formatters.special.AddAmountsFormatter"/>
+            <iso:formatter type="AAf" class="org.nulleins.formats.iso8583.formatters.AddAmountsFormatter"/>
             <iso:formatter type="CALf" ref="calFormatter"/>
         </iso:formatters>
 

@@ -105,7 +105,7 @@ public class MessageTemplate {
    * Set the definition of the fields to be used in this message template,
    * and calculate the bitmap describing their presence or otherwise, for
    * all potential 192 fields (primary, secondary and tertiary bitmaps)
-   * @param fields Field-number keyed map of field templates
+   * @param fields Field-f keyed map of field templates
    */
   public void setFields(final Map<Integer, FieldTemplate> fields) {
     this.fields = fields;
@@ -144,7 +144,7 @@ public class MessageTemplate {
    * @param field
    */
   public void addField(final FieldTemplate field) {
-    field.setMessage(this);
+    field.setMessageTemplate(this);
     fields.put(field.getNumber(), field);
     bitmap.setField(field.getNumber());
     // add the field to the name index, if set:
@@ -229,9 +229,9 @@ public class MessageTemplate {
   }
 
   /**
-   * Answer with the field number mapped to the supplied field name
+   * Answer with the field f mapped to the supplied field name
    * @param fieldName to lookup
-   * @return field number
+   * @return field f
    */
   int getFieldNumberForName(final String fieldName) {
     if (!nameIndex.containsKey(fieldName)) {
@@ -242,5 +242,11 @@ public class MessageTemplate {
 
   public Collection<FieldTemplate> getNamedFields() {
     return fields.values();
+  }
+
+  public void addFields(final List<FieldTemplate> fieldTemplates) {
+    for(final FieldTemplate template : fieldTemplates) {
+      addField(template);
+    }
   }
 }

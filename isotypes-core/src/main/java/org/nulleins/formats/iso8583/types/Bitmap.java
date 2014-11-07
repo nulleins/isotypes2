@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 /**
  * Implementation of the ISO8583 bitmap type, with facilities to create, parse and format a
- * message's bitmap in a number of formats
+ * message's bitmap in a f of formats
  * @author phillipsr
  */
 public class Bitmap {
