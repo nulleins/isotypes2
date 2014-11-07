@@ -1,5 +1,10 @@
-package org.nulleins.formats.iso8583;
+package org.nulleins.formats.iso8583.config;
 
+import org.nulleins.formats.iso8583.AutoGeneratorFactory;
+import org.nulleins.formats.iso8583.FieldTemplate;
+import org.nulleins.formats.iso8583.MessageFactory;
+import org.nulleins.formats.iso8583.MessageTemplate;
+import org.nulleins.formats.iso8583.StanGenerator;
 import org.nulleins.formats.iso8583.formatters.AddAmountsFormatter;
 import org.nulleins.formats.iso8583.formatters.CardAcceptorLocationFormatter;
 import org.nulleins.formats.iso8583.types.BitmapType;

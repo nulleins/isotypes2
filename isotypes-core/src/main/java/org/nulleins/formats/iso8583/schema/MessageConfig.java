@@ -1,6 +1,8 @@
 package org.nulleins.formats.iso8583.schema;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.nulleins.formats.iso8583.FieldTemplate;
@@ -11,7 +13,6 @@ import org.nulleins.formats.iso8583.types.CharEncoder;
 import org.nulleins.formats.iso8583.types.ContentType;
 import org.nulleins.formats.iso8583.types.MTI;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,17 +42,8 @@ public final class MessageConfig {
       charset = Optional.absent();
     }
     schema.getString("charset");
-    final List<MessageTemplate> messages = new ArrayList<>();
-    for ( final Config messageConf : schema.getConfigList("messages")) {
-      final MTI mti = MTI.create(messageConf.getString("type"));
-      final MessageTemplate template = MessageTemplate.create(header,mti,bitmapType);
-      if ( messageConf.hasPath("name")) {
-        template.setName(messageConf.getString("name"));
-      }
-      template.setFields(getFields(template
-          , messageConf.getObject("fields").unwrapped()));
-      messages.add(template);
-    }
+    final List<MessageTemplate> messages = FluentIterable.from(schema.getConfigList("messages"))
+        .transform(getMessageTemplate(header, bitmapType)).toList();
     final MessageFactory result = MessageFactory.Builder()
         .id(id)
         .header(header)
@@ -62,6 +54,21 @@ public final class MessageConfig {
         .build();
     result.addMessages(messages);
     return result;
+  }
+
+  private Function<Config, MessageTemplate> getMessageTemplate(final String header, final BitmapType bitmapType) {
+    return new Function<Config, MessageTemplate>() {
+      @Override
+      public MessageTemplate apply(final Config input) {
+        final MTI mti = MTI.create(input.getString("type"));
+        final MessageTemplate template = MessageTemplate.create(header,mti,bitmapType);
+        if ( input.hasPath("name")) {
+          template.setName(input.getString("name"));
+        }
+        template.setFields(getFields(template, input.getObject("fields").unwrapped()));
+        return template;
+      }
+    };
   }
 
   private Map<Integer,FieldTemplate> getFields(final MessageTemplate template, final Map<String, Object> fieldList) {

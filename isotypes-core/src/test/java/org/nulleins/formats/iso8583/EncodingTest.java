@@ -1,6 +1,7 @@
 package org.nulleins.formats.iso8583;
 
 import org.junit.Test;
+import org.nulleins.formats.iso8583.config.CharMessageConfiguration;
 import org.nulleins.formats.iso8583.types.MTI;
 
 import java.io.IOException;
