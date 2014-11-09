@@ -1,1 +1,1 @@
-include "isotypes-core", "isotypes-spring"
+include "isotypes-core", "isotypes-spring", "isotypes-camel"

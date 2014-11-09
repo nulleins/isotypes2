@@ -126,6 +126,7 @@ public class FieldTemplate {
   format(final Object value) {
     final String result;
     try {
+      final TypeFormatter<?> formatter = messageTemplate.getFormatter(type);
       result = new String(
           messageTemplate.getFormatter(type).format(type, value, this.dimension));
     } catch (Exception e) {

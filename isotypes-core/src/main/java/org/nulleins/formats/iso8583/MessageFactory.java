@@ -235,9 +235,15 @@ public class MessageFactory {
     // Iterate over the fields in order of field f,
     // appending the field's data to the output stream
     for (final Integer key : new TreeSet<>(template.getFields().keySet())) {
-      final Object value = writeField(params.get(key), writer, dos, template.getFields().get(key));
-      // update parameter map with possibly autogen'd/default value, for consistency
-      params.put(key, value);
+      final FieldTemplate value1 = template.getFields().get(key);
+      final Object key1 = params.get(key);
+      try {
+        final Object value = writeField(key1, writer, dos, value1);
+        // update parameter map with possibly autogen'd/default value, for consistency
+        params.put(key, value);
+      } catch ( Exception e) {
+        e.printStackTrace();
+      }
     }
 
     dos.flush();
@@ -458,6 +464,10 @@ public class MessageFactory {
   }
 
   public static Builder Builder() { return new Builder(); }
+
+  public boolean canBuild(final MTI messageType) {
+    return messages.containsKey(messageType);
+  }
 
   public static class Builder {
     private String id;
