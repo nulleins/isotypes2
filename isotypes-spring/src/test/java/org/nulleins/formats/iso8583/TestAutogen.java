@@ -43,7 +43,7 @@ public class TestAutogen {
   @Test
   public void messageGetsDefaultAndAutogenValue()
       throws IOException {
-    Map<String, Object> params = new HashMap<String, Object>() {{
+    final Map<String, Object> params = new HashMap<String, Object>() {{
       put("accountNumber", 5061189187162513461L);
       put("amount", 2000000);
       put("transTimeLocal", "101818");
@@ -62,13 +62,13 @@ public class TestAutogen {
       put("accountId1", "0551031385");
     }};
 
-    Message message = bankMessages.createByNames(MTI.create("0200"), params);
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    final Message message = bankMessages.createByNames(MTI.create("0200"), params);
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     bankMessages.writeToStream(message, baos);
-    for (String line : message.describe()) {
+    for (final String line : message.describe()) {
       System.out.println(line);
     }
-    String messageText = baos.toString();
+    final String messageText = baos.toString();
 
     assertThat(message.validate(), empty());
     assertThat(ExpectRequest.reset(messageText).matches(), is(true));

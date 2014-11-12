@@ -9,7 +9,4 @@
     <!--  load the ISO8583 message schema for this sample -->
     <import resource="classpath:org/nulleins/formats/iso8583/samples/MessageSample-iso8583.xml"/>
 
-    <!--  instantiate and run the sample class -->
-    <ctx:component-scan base-package="org.nulleins.formats.iso8583"/>
-
 </beans>

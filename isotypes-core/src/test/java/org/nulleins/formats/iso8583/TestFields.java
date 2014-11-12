@@ -22,7 +22,7 @@ public class TestFields {
 
   @Before
   public void setup() {
-    messageTemplate = MessageTemplate.create("", MTI.create(0x0200), BitmapType.HEX);
+    messageTemplate = MessageTemplate.create("ISO015000077", MTI.create(0x0200), BitmapType.HEX);
     final MessageFactory schema = new MessageFactory();
     schema.initialize();
     messageTemplate.setSchema(schema);

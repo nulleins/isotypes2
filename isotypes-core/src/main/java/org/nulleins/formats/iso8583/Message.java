@@ -23,10 +23,12 @@ public class Message {
 
   /** Instantiate a new message, of the type specified
     * @param messageTypeIndicator
-    * @throws IllegalArgumentException if the supplied MTI is null */
-  public Message(final MTI messageTypeIndicator) {
+    * @param header
+   * @throws IllegalArgumentException if the supplied MTI is null */
+  public Message(final MTI messageTypeIndicator, final String header) {
     Preconditions.checkNotNull(messageTypeIndicator, "MTI cannot be null");
     this.messageTypeIndicator = messageTypeIndicator;
+    this.header = header;
   }
 
   /** Answer with this message's MTI */
@@ -42,9 +44,7 @@ public class Message {
     return template;
   }
 
-  public void setHeader(final String header) {
-    this.header = header;
-  }
+  //public void setHeader(final String header) { this.header = header; }
 
   public Map<Integer, Object> getFields() {
     return fields;
@@ -205,12 +205,37 @@ public class Message {
     }
 
     public Message build() {
-      final Message result = new Message(messageTypeIndicator);
-      result.setHeader(header);
+      final Message result = new Message(messageTypeIndicator, header);
       result.setFields(fields);
       result.setTemplate(template);
       return result;
     }
   }
 
+  @Override
+  public boolean equals(final Object other) {
+    if (this == other) { return true;}
+    if (other == null || getClass() != other.getClass()) { return false;}
+    final Message message = (Message) other;
+
+    if (!messageTypeIndicator.equals(message.messageTypeIndicator)) { return false; }
+
+    if(fields.size() != message.fields.size()) { return false; }
+    for ( final Map.Entry<Integer,Object> item : fields.entrySet()) {
+      final Object that = message.fields.get(item.getKey());
+      if ( !item.getValue().toString().equals(that.toString())) {
+        return false;
+      }
+    }
+
+    return header.equals(message.header);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = messageTypeIndicator.hashCode();
+    result = 31 * result + fields.hashCode();
+    result = 31 * result + header.hashCode();
+    return result;
+  }
 }

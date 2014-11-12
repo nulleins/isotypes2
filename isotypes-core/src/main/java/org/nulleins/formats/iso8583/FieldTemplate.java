@@ -158,7 +158,7 @@ public class FieldTemplate {
     Preconditions.checkNotNull(messageTemplate);
     final TypeFormatter<?> formatter = messageTemplate.getFormatter(type);
     if (formatter == null) {
-      throw new IllegalStateException("no formatted defined for field: " + this);
+      throw new IllegalStateException("no formatter defined for field: " + this);
     }
     return messageTemplate.getFormatter(type).parse(type, dimension, data.length, data);
   }

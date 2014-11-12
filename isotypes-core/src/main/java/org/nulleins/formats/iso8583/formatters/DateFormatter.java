@@ -16,8 +16,8 @@ import java.util.Map;
  * Formatter that can format and parse ISO8583 date field formats
  * @author phillipsr
  */
-public class DateFormatter
-    extends TypeFormatter<DateTime> {
+public class DateFormatter extends TypeFormatter<DateTime> {
+
   private final static Map<String, DateTimeFormatter> Formatters
       = new HashMap<String, DateTimeFormatter>(3) {{
     put(FieldType.DATE + ":10", DateTimeFormat.forPattern("MMddHHmmss"));

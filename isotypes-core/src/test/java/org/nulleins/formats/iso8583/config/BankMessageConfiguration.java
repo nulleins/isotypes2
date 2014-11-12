@@ -19,6 +19,7 @@ public class BankMessageConfiguration {
 
     final MessageFactory result = MessageFactory.Builder()
         .id("messageSet")
+        .header("ISO015000077")
         .contentType(ContentType.TEXT)
         .bitmapType(BitmapType.HEX)
         .build();
@@ -69,9 +70,9 @@ public class BankMessageConfiguration {
         responseBuilder.f(37).name("rrn").desc("Retrieval Reference Number").dim("fixed(12)").type("an").build(),
         responseBuilder.f(41).name("cardTermId").desc("Card Acceptor Terminal ID").dim("fixed(8)").type("ans").build(),
         responseBuilder.f(42).name("cardAcceptorId").desc("Card Acceptor ID Code").dim("fixed(15)").type("ans").build(),
-        responseBuilder.f(43).name("cardAcceptorLoc").desc("Card Acceptor Location Name").dim("fixed(40)").type("CALf").build(),
+        responseBuilder.f(43).name("cardAcceptorLoc").desc("Card Acceptor Location Name").dim("fixed(40)").type("ans").build(),
         responseBuilder.f(49).name("currencyCode").desc("Currency Code, Transaction").dim("fixed(3)").type("n").build(),
-        responseBuilder.f(54).name("addAmounts").desc("Additional Amounts").dim("lllvar(120)").type("AAf").build(),
+        responseBuilder.f(54).name("addAmounts").desc("Additional Amounts").dim("lllvar(120)").type("ans").build(),
         responseBuilder.f(60).name("adviceCode").desc("Advice/reason code").dim("lllvar(120)").type("an").build(),
         responseBuilder.f(102).name("accountId1").desc("Account Identification 1").dim("llvar(28)").type("ans").build()));
 

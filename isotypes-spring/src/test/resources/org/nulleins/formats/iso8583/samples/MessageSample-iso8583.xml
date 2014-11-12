@@ -9,7 +9,7 @@
         http://nulleins.org/schema/iso8583
             http://nulleins.org/schema/iso8583-1.1.xsd">
 
-    <schema id="testMessages" header="ISO015000077" bitmapType="hex" contentType="text">
+    <schema id="sampleMessages" header="ISO015000077" bitmapType="hex" contentType="text">
         <description>Bank messages</description>
 
         <message type="0200" name="Acquirer Payment Request">

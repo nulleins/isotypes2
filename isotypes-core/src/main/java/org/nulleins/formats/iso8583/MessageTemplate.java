@@ -60,6 +60,7 @@ public class MessageTemplate {
    */
   private MessageTemplate(final String header, final MTI mti) {
     Preconditions.checkNotNull(header);
+    Preconditions.checkArgument(!header.isEmpty());
     Preconditions.checkNotNull(mti);
     this.header = header;
     type = mti;

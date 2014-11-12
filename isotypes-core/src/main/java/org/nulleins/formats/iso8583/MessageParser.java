@@ -85,8 +85,7 @@ public class MessageParser {
     }
 
     // create resulting message
-    final Message result = new Message(template.getMessageTypeIndicator());
-    result.setHeader(headerLen > 0 ? header : "");
+    final Message result = new Message(template.getMessageTypeIndicator(), headerLen > 0 ? header : "");
 
     final Bitmap bitmap = reader.readBitmap(bitmapType, input);
 

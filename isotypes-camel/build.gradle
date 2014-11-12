@@ -10,4 +10,7 @@ dependencies {
   testCompile "org.apache.camel:camel-spring:${camelVersion}"
   testCompile "org.apache.camel:camel-spring-javaconfig:${camelVersion}"
   testCompile "org.springframework:spring-test:4.1.0.RELEASE"
+  testCompile 'org.slf4j:slf4j-api:1.7.7'
+  testCompile 'org.slf4j:slf4j-simple:1.7.7'
+
 }

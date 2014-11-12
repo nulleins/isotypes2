@@ -32,16 +32,10 @@ public class RunSamples {
   }};
 
 
-  /**
-   * Call the <code>sendMessage</code> of the sample code;
-   * test if successful if no exceptions thrown
-   * @throws IOException
-   * @throws ParseException
-   */
   @Test
   public void runSamples() throws IOException, ParseException {
     final ApplicationContext context = new ClassPathXmlApplicationContext(SampleContextPath);
-    final MessageSample sample = (MessageSample) context.getBean("messageSample");
+    final MessageSample sample = new MessageSample(context.getBean("sampleMessages",MessageFactory.class));
 
     try {
       sample.sendMessage(0x0200, Request);

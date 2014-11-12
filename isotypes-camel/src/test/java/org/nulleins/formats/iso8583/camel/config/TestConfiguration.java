@@ -1,9 +1,7 @@
 package org.nulleins.formats.iso8583.camel.config;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.spring.SpringCamelContext;
-import org.apache.camel.spring.javaconfig.CamelConfiguration;
+import org.apache.camel.spring.javaconfig.SingleRouteCamelConfiguration;
 import org.nulleins.formats.iso8583.FieldTemplate;
 import org.nulleins.formats.iso8583.MessageFactory;
 import org.nulleins.formats.iso8583.MessageTemplate;
@@ -17,27 +15,14 @@ import org.springframework.context.annotation.Configuration;
 import static java.util.Arrays.asList;
 
 @Configuration
-public class TestConfiguration extends CamelConfiguration {
+public class TestConfiguration extends SingleRouteCamelConfiguration {
 
-  @Bean
   @Override
-  protected CamelContext createCamelContext() {
-    final SpringCamelContext result = new SpringCamelContext();
-    result.setName("testContext");
-    try {
-      result.addRoutes(testRouteBuilder());
-    } catch (final Exception e) {
-      throw new IllegalStateException(e);
-    }
-    return result;
-  }
-
-  @Bean
-  RouteBuilder testRouteBuilder() {
+  public RouteBuilder route() {
     return new RouteBuilder() {
       @Override
       public void configure() throws Exception {
-        from ("seda:queue:request")
+        from("seda:queue:request")
             .unmarshal().custom("iso8583")
             .to("mock:receiver");
       }
@@ -45,26 +30,16 @@ public class TestConfiguration extends CamelConfiguration {
   }
 
   @Bean
-  public SpringCamelContext springCamelContext() {
-    if ( createCamelContext() instanceof SpringCamelContext) {
-      return (SpringCamelContext) createCamelContext();
-    } else {
-      throw new IllegalStateException("CamelContext not a SpringCamelContext");
-    }
+  public MessageFactory factory() {
+    return MessageFactory.Builder().id("testMessages")
+        .header("ISO015000077")
+        .contentType(ContentType.TEXT).bitmapType(BitmapType.HEX).build();
   }
 
   @Bean
   public ISO8583Format iso8583() {
-    return new ISO8583Format(testMessages());
-  }
-
-  @Bean
-  MessageFactory testMessages() {
-    final MessageFactory result = MessageFactory.Builder().id("testMessages")
-        .contentType(ContentType.TEXT).bitmapType(BitmapType.HEX).build();
 
     final MessageTemplate template = MessageTemplate.create("ISO015000077", MTI.create(0x0210), BitmapType.HEX);
-    result.addMessage(template);
     final FieldTemplate.Builder builder = FieldTemplate.localBuilder(template).get();
     template.setFields(asList(
         builder.f(2).name("accountNumber").desc("Primary Account Number").dim("llvar(19)").type("n").build(),
@@ -82,12 +57,14 @@ public class TestConfiguration extends CamelConfiguration {
         builder.f(37).name("rrn").desc("Retrieval Reference Number").dim("fixed(12)").type("an").build(),
         builder.f(41).name("cardTermId").desc("Card Acceptor Terminal ID").dim("fixed(8)").type("ans").build(),
         builder.f(42).name("cardAcceptorId").desc("Card Acceptor ID Code").dim("fixed(15)").type("ans").build(),
-        builder.f(43).name("cardAcceptorLoc").desc("Card Acceptor Location Name").dim("fixed(40)").type("CALf").build(),
+        builder.f(43).name("cardAcceptorLoc").desc("Card Acceptor Location Name").dim("fixed(40)").type("ans").build(),
         builder.f(49).name("currencyCode").desc("Currency Code, Transaction").dim("fixed(3)").type("n").build(),
-        builder.f(54).name("addAmounts").desc("Additional Amounts").dim("lllvar(120)").type("AAf").build(),
+        builder.f(54).name("addAmounts").desc("Additional Amounts").dim("lllvar(120)").type("ans").build(),
         builder.f(60).name("adviceCode").desc("Advice/reason code").dim("lllvar(120)").type("an").build(),
         builder.f(102).name("accountId1").desc("Account Identification 1").dim("llvar(28)").type("ans").build()));
 
-    return result;
+    factory().addMessage(template);
+    return new ISO8583Format(factory());
   }
+
 }
